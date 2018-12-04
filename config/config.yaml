@@ -112,3 +112,102 @@ coils:
         number: 7
     upperReset:
         number: 8
+
+digital_outputs:
+    game_over_relay:
+        number: 1
+        type: light
+        enable_events: ball_started
+        disable_events: ball_will_end
+    tilt_relay:
+        number: 2
+        type: light
+
+lights:
+    highScore:
+        number: 3
+    shootAgain:
+        number: 4
+    spinner:
+        number: 5
+    advMultiplier:
+        number: 6
+    lowerLaneD:
+        number: 7
+        tags: lane, laneD
+    lowerLaneC:
+        number: 8
+        tags: lane, laneC
+    lowerLaneA:
+        number: 9
+        tags: lane, laneA
+    lowerLaneB:
+        number: 10
+        tags: lane, laneB
+    leftEb:
+        number: 11
+    whiteDrops:
+        number: 12
+    upperLaneD:
+        number: 14
+        tags: lane, laneD
+    upperLaneC:
+        number: 13
+        tags: lane, laneC
+    upperLaneA:
+        number: 16
+        tags: lane, laneA
+    upperLaneB:
+        number: 15
+        tags: lane, laneB
+    special:
+        number: 17
+    collectBonus:
+        number: 18
+    bonus5x:
+        number: 19
+        tags: bonusMult
+    bonus4x:
+        number: 20
+        tags: bonusMult
+    bonus2x:
+        number: 21
+        tags: bonusMult
+    bonus3x:
+        number: 22
+        tags: bonusMult
+    bonus1k:
+        number: 23
+        tags: bonus
+    bonus2k:
+        number: 24
+        tags: bonus
+    bonus3k:
+        number: 25
+        tags: bonus
+    bonus4k:
+        number: 26
+        tags: bonus
+    bonus5k:
+        number: 27
+        tags: bonus
+    bonus6k:
+        number: 28
+        tags: bonus
+    bonus7k:
+        number: 29
+        tags: bonus
+    bonus8k:
+        number: 30
+        tags: bonus
+    bonus9k:
+        number: 31
+        tags: bonus
+    bonus10k:
+        number: 32
+        tags: bonus
+    bonus20k:
+        number: 33
+        tags: bonus
+    rightEb:
+        number: 36
