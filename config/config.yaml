@@ -95,3 +95,20 @@ switches:
     outlane:
         number: 73
     
+coils:
+    outhole:
+        number: 1
+    knocker:
+        number: 2
+    tens:
+        number: 3
+    hundreds:
+        number: 4
+    thousands:
+        number: 5
+    eject:
+        number: 6
+    yellowReset:
+        number: 7
+    upperReset:
+        number: 8
