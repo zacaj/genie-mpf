@@ -94,6 +94,53 @@ switches:
         number: 64
     outlane:
         number: 73
+
+drop_targets:
+    yellow1:
+        switch: dropYellow1
+        reset_coil: yellowReset
+    yellow2:
+        switch: dropYellow2
+        reset_coil: yellowReset
+    yellow3:
+        switch: dropYellow3
+        reset_coil: yellowReset
+    yellow4:
+        switch: dropYellow4
+        reset_coil: yellowReset
+    red1:
+        switch: dropRed1
+        reset_coil: upperReset
+    white2:
+        switch: dropWhite2
+        reset_coil: upperReset
+    red3:
+        switch: dropRed3
+        reset_coil: upperReset
+    white4:
+        switch: dropWhite4
+        reset_coil: upperReset
+    red5:
+        switch: dropRed5
+        reset_coil: upperReset
+    white6:
+        switch: dropWhite6
+        reset_coil: upperReset
+    red7:
+        switch: dropRed7
+        reset_coil: upperReset
+
+drop_target_banks:
+    yellow:
+        drop_targets: yellow1, yellow2, yellow3, yellow4
+        reset_coils: yellowReset
+        reset_on_complete: 500ms
+    upper:
+        drop_targets: red1, white2, red3, white4, red5, white6, red7
+        reset_coils: upperReset
+        reset_on_complete: 500ms
+
+
     
 coils:
     outhole:
@@ -211,3 +258,39 @@ lights:
         tags: bonus
     rightEb:
         number: 36
+
+segment_displays:
+  dispInfo:
+    number: 0
+  disp1:
+    number: 1
+  disp2:
+    number: 2
+  disp3:
+    number: 3
+  disp4:
+    number: 4
+
+ball_devices:
+    bd_outhole:
+        ball_switches: outhole
+        eject_coil: outhole
+        eject_targets: playfield
+        tags: drain, home, trough
+    bd_eject:
+        ball_switches: eject
+        eject_coil: eject
+
+ball_holds:
+    eject:
+        hold_devices: bd_eject
+
+
+
+playfields:
+    playfield:
+        default_source_device: bd_outhole
+        tags: default
+
+virtual_platform_start_active_switches:
+    outhole
