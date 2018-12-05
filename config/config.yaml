@@ -3,6 +3,10 @@
 hardware:
     platform: lisy 
 
+lisy:
+    network_host: lisy
+    
+
 switches:
     slam:
         number: 76
@@ -275,11 +279,13 @@ ball_devices:
     bd_outhole:
         ball_switches: outhole
         eject_coil: outhole
-        eject_targets: playfield
+        eject_targets: eject_targets
         tags: drain, home, trough
     bd_eject:
         ball_switches: eject
         eject_coil: eject
+    bd_shooterLane:
+        eject_targets: playfield
 
 ball_holds:
     eject:
@@ -294,3 +300,4 @@ playfields:
 
 virtual_platform_start_active_switches:
     outhole
+
