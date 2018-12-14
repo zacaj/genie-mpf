@@ -1,0 +1,189 @@
+#config_version=5
+mode:
+    start_events: ball_starting
+    priority: 100
+    code: Base.Base
+variable_player:
+    mode_base_started:
+        bonus: 
+            int: 1
+            action: set
+        scoreBonus: 
+            int: 0
+            action: set
+        whiteDrops: 
+            int: 0
+            action: set
+        advX:
+            int: 1
+            action: set
+        bonus_multiplier:
+            int: 1
+            action: set
+
+    lowerPop_active:
+        score: 2000
+    upperPop_active:
+        score: 200
+    sw_dropYellow_active{current_player.advX}:
+        bonus_multiplier: 1
+        advX: 
+            int: 0
+            action: set
+    sw_dropYellow_active{not current_player.advX}:
+        bonus: 1
+    sw_dropRed_active:
+        score: 2000
+        bonus: 1
+    sw_dropYellow_active:
+        score: 2000
+    advBonus_active:
+        score: 500
+        bonus: 1
+    dangerLane_active:
+        score: 3000
+    outlane_active:
+        score: 10000
+    spinner_active{current_player.spinner}:
+        bonus: 3
+    spinner_active{current_player.superSpinner==1}:
+        score: 1000
+    spinner_active{current_player.superSpinner==0}:
+        score: 100
+
+    drop_target_bank_red_down:
+        special: 1
+    drop_target_bank_white_down:
+        rightEb: 1
+    special{current_player.special>0}:
+        score: 50000
+        special: -1
+    rightEb{current_player.rightEb>0}:
+        score: 25000
+        rightEb: -1
+    leftEb{current_player.leftEb>0}:
+        score: 25000
+        leftEb: -1
+    player_bonus{current_player.bonus>39}:
+        bonus:
+            int: 39
+            action: set
+        score: 5000
+    player_bonus{value%2==0}:
+        spinner:
+            int: 0
+            action: set
+    player_bonus{value%2!=0}:
+        spinner:
+            int: 1
+            action: set     
+
+    inlane_active:
+        superSpinner:
+            int: 1
+            action: set 
+    timer_spinner_complete:
+        superSpinner:
+            int: 0
+            action: set
+
+    laneA_active:
+        a:
+            int: 0
+            action: set      
+    laneB_active:
+        b:
+            int: 0
+            action: set      
+    laneC_active:
+        c:
+            int: 0
+            action: set      
+    laneD_active:
+        d:
+            int: 0
+            action: set      
+
+event_player:
+    rightEb_active:
+      - advBonus_active
+    leftEb_active:
+      - advBonus_active
+    special_active:
+      - advBonus_active
+    inlane_active:
+      - advBonus_active
+
+light_player:
+    "{current_player.spinner==1}":
+        spinner: on
+    "{current_player.a==1}":
+        laneA: on
+    "{current_player.b==1}":
+        laneB: on
+    "{current_player.c==1}":
+        laneC: on
+    "{current_player.d==1}":
+        laneD: on
+
+    player_bonus:
+        bonus: off
+    player_bonus{value%10>=1}:
+        bonus1k: on
+    player_bonus{value%10>=2}:
+        bonus2k: on
+    player_bonus{value%10>=3}:
+        bonus3k: on
+    player_bonus{value%10>=4}:
+        bonus4k: on
+    player_bonus{value%10>=5}:
+        bonus5k: on
+    player_bonus{value%10>=6}:
+        bonus6k: on
+    player_bonus{value%10>=7}:
+        bonus7k: on
+    player_bonus{value%10>=8}:
+        bonus8k: on
+    player_bonus{value%10>=9}:
+        bonus9k: on
+    player_bonus{value>=10 and value <20}:
+        bonus10k: on
+    player_bonus{value>=20}:
+        bonus20k: on
+    player_bonus{value>=30}:
+        bonus10k: on       
+
+    player_bonus_multiplier:
+        bonusMult: off
+    player_bonus_multiplier{value>=2}:
+        bonus2x: on
+    player_bonus_multiplier{value>=3}:
+        bonus3x: on
+    player_bonus_multiplier{value>=4}:
+        bonus4x: on
+    player_bonus_multiplier{value>=5}:
+        bonus5x: on
+
+show_player:
+    player_superSpinner{value==1}:
+        flashing:
+            show_tokens:
+                lights: spinner
+            key: spinnerShow
+            action: play
+            priority: 100
+            speed: 10
+    player_superSpinner{value==0}:
+        spinnerShow: stop
+
+timers:
+    spinner:
+        start_value: 3
+        end_value: 0
+        direction: down
+        control_events:
+          - action: restart
+            event: inlane_active
+          - action: jump
+            value: 1
+            event: spinner_active

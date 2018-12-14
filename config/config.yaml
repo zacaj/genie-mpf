@@ -139,10 +139,24 @@ drop_target_banks:
         drop_targets: yellow1, yellow2, yellow3, yellow4
         reset_coils: yellowReset
         reset_on_complete: 500ms
-    upper:
-        drop_targets: red1, white2, red3, white4, red5, white6, red7
+        reset_events: 
+            drop_target_bank_yellow_down
+            ball_starting
+            machine_reset_phase_3
+    red:
+        drop_targets: red1, red3, red5, red7
         reset_coils: upperReset
         reset_on_complete: 500ms
+        reset_events: 
+            drop_target_bank_red_down
+            ball_starting
+            machine_reset_phase_3
+    white:
+        drop_targets: white2, white4, white6
+        reset_coils: upperReset
+        reset_on_complete: 500ms
+        reset_events: 
+            drop_target_bank_white_down
 
 
     
@@ -279,13 +293,11 @@ ball_devices:
     bd_outhole:
         ball_switches: outhole
         eject_coil: outhole
-        eject_targets: eject_targets
+        eject_targets: playfield
         tags: drain, home, trough
     bd_eject:
         ball_switches: eject
         eject_coil: eject
-    bd_shooterLane:
-        eject_targets: playfield
 
 ball_holds:
     eject:
@@ -301,3 +313,31 @@ playfields:
 virtual_platform_start_active_switches:
     outhole
 
+modes:
+  - base
+#  - bonus
+#  - tilt
+
+player_vars:
+    spinner:
+        initial_value: 0
+    a:
+        initial_value: 1
+    b:
+        initial_value: 1
+    c:
+        initial_value: 1
+    d:
+        initial_value: 1
+    superSpinner:
+        initial_value: 0
+
+shows:
+    flashing:
+      - time: 0
+        lights:
+            (lights): on
+      - time: 1
+        lights:
+            (lights): off
+      - time: 2
