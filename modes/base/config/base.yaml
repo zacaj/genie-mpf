@@ -20,19 +20,44 @@ variable_player:
         bonus_multiplier:
             int: 1
             action: set
+        redDown:
+            int: 0
+            action: set
+        whiteDown:
+            int: 0
+            action: set
 
     lowerPop_active:
         score: 2000
     upperPop_active:
         score: 200
-    sw_dropYellow_active{current_player.advX}:
+    player_redDown{value>0 and (current_player.whiteDown>0)}:
+        advX: 
+            int: 1
+            action: set
+    player_whiteDown{value>0 and (current_player.redDown>0)}:
+        advX: 
+            int: 1
+            action: set
+    sw_dropYellow_active{current_player.advX!=1}:
+        bonus: 1
+    sw_dropYellow_active{current_player.advX==1}:
         bonus_multiplier: 1
         advX: 
             int: 0
             action: set
-    sw_dropYellow_active{not current_player.advX}:
-        bonus: 1
+        redDown:
+            int: 0
+            action: set
+        whiteDown:
+            int: 0
+            action: set
     sw_dropRed_active:
+        score: 2000
+        bonus: 1
+        redDown: 1
+    sw_dropWhite_active:
+        whiteDown: 1
         score: 2000
         bonus: 1
     sw_dropYellow_active:
@@ -44,6 +69,7 @@ variable_player:
         score: 3000
     outlane_active:
         score: 10000
+        heldBonus: 1
     spinner_active{current_player.spinner}:
         bonus: 3
     spinner_active{current_player.superSpinner==1}:
@@ -51,22 +77,29 @@ variable_player:
     spinner_active{current_player.superSpinner==0}:
         score: 100
 
+    drop_target_bank_yellow_down:
+        scoreBonus:
+            int: 1
+            action: set
+    drop_target_bank_yellow_down{current_player.heldBonus==0}:
+        heldBonus: current_player.bonus
+    #    heldBonusX: current_player.bonus_multiplier
     drop_target_bank_red_down:
         special: 1
     drop_target_bank_white_down:
         rightEb: 1
     special{current_player.special>0}:
-        score: 50000
+        score: 100000
         special: -1
     rightEb{current_player.rightEb>0}:
         score: 25000
         rightEb: -1
     leftEb{current_player.leftEb>0}:
-        score: 25000
+        score: 50000
         leftEb: -1
-    player_bonus{current_player.bonus>39}:
+    player_bonus{current_player.bonus>29}:
         bonus:
-            int: 39
+            int: 29
             action: set
         score: 5000
     player_bonus{value%2==0}:
@@ -87,22 +120,62 @@ variable_player:
             int: 0
             action: set
 
+    laneA_active{current_player.a==1}:
+        score: 4500
+        bonus: 1   
+    laneB_active{current_player.b==1}:
+        score: 4500
+        bonus: 1   
+    laneC_active{current_player.c==1}:
+        score: 4500
+        bonus: 1   
+    laneD_active{current_player.d==1}:
+        score: 4500
+        bonus: 1   
     laneA_active:
         a:
             int: 0
-            action: set      
+            action: set   
+        score: 500
     laneB_active:
         b:
             int: 0
-            action: set      
+            action: set   
+        score: 500   
     laneC_active:
         c:
             int: 0
-            action: set      
+            action: set   
+        score: 500   
     laneD_active:
         d:
             int: 0
+            action: set  
+        score: 500    
+    lanesComplete:
+        a:
+            int: 1
             action: set      
+        b:
+            int: 1
+            action: set      
+        c:
+            int: 1
+            action: set      
+        d:
+            int: 1
+            action: set 
+        leftEb: 1
+    
+    #player_bonus:
+    #    scoreBonus:
+    #        int: 0
+    #        action: set
+    #player_bonus{(value>=10 and value<20) or value==39}:
+    #    scoreBonus:
+    #        int: 1
+    #        action: set
+    
 
 event_player:
     rightEb_active:
@@ -125,6 +198,10 @@ light_player:
         laneC: on
     "{current_player.d==1}":
         laneD: on
+    "{current_player.scoreBonus==1}":
+        collectBonus: on    
+    "{current_player.advX==1}":
+        advMultiplier: on
 
     player_bonus:
         bonus: off
@@ -172,9 +249,239 @@ show_player:
             key: spinnerShow
             action: play
             priority: 100
-            speed: 10
+            speed: 5
     player_superSpinner{value==0}:
         spinnerShow: stop
+    "{current_player.special==1}":
+        flashing:
+            show_tokens:
+                lights: special
+            action: play
+            key: specialShow
+    "{current_player.leftEb==1}":
+        flashing:
+            show_tokens:
+                lights: leftEb
+            action: play
+            key: leftEbShow
+    "{current_player.rightEb==1}":
+        flashing:
+            show_tokens:
+                lights: rightEb
+            action: play
+            key: rightEbShow
+
+    "{current_player.heldBonus%10==1}":
+        flashing:
+            show_tokens:
+                lights: bonus1k
+            action: play
+            key: bonusShow1
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==2}":
+        flashing:
+            show_tokens:
+                lights: bonus2k
+            action: play
+            key: bonusShow2
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==3}":
+        flashing:
+            show_tokens:
+                lights: bonus3k
+            action: play
+            key: bonusShow3
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==4}":
+        flashing:
+            show_tokens:
+                lights: bonus4k
+            action: play
+            key: bonusShow4
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==5}":
+        flashing:
+            show_tokens:
+                lights: bonus5k
+            action: play
+            key: bonusShow5
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==6}":
+        flashing:
+            show_tokens:
+                lights: bonus6k
+            action: play
+            key: bonusShow6
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==7}":
+        flashing:
+            show_tokens:
+                lights: bonus7k
+            action: play
+            key: bonusShow7
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==8}":
+        flashing:
+            show_tokens:
+                lights: bonus8k
+            action: play
+            key: bonusShow8
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus%10==9}":
+        flashing:
+            show_tokens:
+                lights: bonus9k
+            action: play
+            key: bonusShow9
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus>=10 and current_player.heldBonus<20}":
+        flashing:
+            show_tokens:
+                lights: bonus0k
+            action: play
+            key: bonusShow10
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonus>=20}":
+        flashing:
+            show_tokens:
+                lights: bonus20k
+            action: play
+            key: bonusShow20
+            priority: 100
+            sync_ms: 1000
+
+    "{current_player.heldBonusX==2}":
+        flashing:
+            show_tokens:
+                lights: bonus2x
+            action: play
+            key: bonus2xShow
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonusX==3}":
+        flashing:
+            show_tokens:
+                lights: bonus3x
+            action: play
+            key: bonus3xShow
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonusX==4}":
+        flashing:
+            show_tokens:
+                lights: bonus4x
+            action: play
+            key: bonus4xShow
+            priority: 100
+            sync_ms: 1000
+    "{current_player.heldBonusX==5}":
+        flashing:
+            show_tokens:
+                lights: bonus5x
+            action: play
+            key: bonus5xShow
+            priority: 100
+            sync_ms: 1000
+
+    #"{current_player.heldBonus%10>=1 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<1)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus1k
+    #        action: play
+    #        key: bonusShow1
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=2 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<2)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus2k
+    #        action: play
+    #        key: bonusShow2
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=3 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<3)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus3k
+    #        action: play
+    #        key: bonusShow3
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=4 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<4)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus4k
+    #        action: play
+    #        key: bonusShow4
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=5 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<5)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus5k
+    #        action: play
+    #        key: bonusShow5
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=6 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<6)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus6k
+    #        action: play
+    #        key: bonusShow6
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=7 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<7)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus7k
+    #        action: play
+    #        key: bonusShow7
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=8 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<8)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus8k
+    #        action: play
+    #        key: bonusShow8
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus%10>=9 and (current_player.bonus%10>=current_player.heldBonus%10 or current_player.bonus%10<9)}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus9k
+    #        action: play  
+    #        key: bonusShow9
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus>=10 and current_player.heldBonus<20}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus10k
+    #        action: play  
+    #        key: bonusShow10
+    #        priority: 100
+    #        sync_ms: 1000
+    #"{current_player.heldBonus>=20}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: bonus20k
+    #        action: play  
+    #        key: bonusShow20
+    #        priority: 100
+    #        sync_ms: 1000
+
 
 timers:
     spinner:

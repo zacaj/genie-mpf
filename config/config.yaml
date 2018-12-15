@@ -331,13 +331,46 @@ player_vars:
         initial_value: 1
     superSpinner:
         initial_value: 0
+    redDown:
+        initial_value: 0
+    whiteDown:
+        initial_value: 0
+    advX:
+        initial_value: 1
+    scoreBonus:
+        initial_value: 0
+    bonus:
+        initial_value: 1
+    whiteDrops:
+        initial_value: 0
+    bonus_multiplier:
+        initial_value: 1
+    heldBonus:
+        initial_value: 0
+    heldBonusX:
+        initial_value: 0
+    special:
+        initial_value: 0
+    leftEb:
+        initial_value: 0
+    rightEb:
+        initial_value: 0
 
 shows:
     flashing:
       - time: 0
         lights:
             (lights): on
-      - time: 1
+      - time: .5
         lights:
             (lights): off
-      - time: 2
+      - time: 1
+
+accruals:
+    lane:
+        events:
+          - laneA_active
+          - laneB_active
+          - laneC_active
+          - laneD_active
+        events_when_complete: lanesComplete
