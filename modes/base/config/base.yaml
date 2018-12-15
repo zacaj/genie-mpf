@@ -6,16 +6,16 @@ mode:
 variable_player:
     mode_base_started:
         bonus: 
-            int: 1
+            int: current_player.heldBonus if current_player.heldBonus>0  else 1
             action: set
-        scoreBonus: 
-            int: 0
-            action: set
+       #scoreBonus: 
+       #    int: 0
+       #    action: set
         whiteDrops: 
             int: 0
             action: set
         advX:
-            int: 1
+            int: 0
             action: set
         bonus_multiplier:
             int: 1
@@ -24,6 +24,9 @@ variable_player:
             int: 0
             action: set
         whiteDown:
+            int: 0
+            action: set
+        heldBonus:
             int: 0
             action: set
 
@@ -86,8 +89,14 @@ variable_player:
     #    heldBonusX: current_player.bonus_multiplier
     drop_target_bank_red_down:
         special: 1
+        scoreBonus:
+            int: 1
+            action: set
     drop_target_bank_white_down:
         rightEb: 1
+        scoreBonus:
+            int: 1
+            action: set
     special{current_player.special>0}:
         score: 100000
         special: -1
@@ -175,6 +184,26 @@ variable_player:
     #    scoreBonus:
     #        int: 1
     #        action: set
+
+    timer_bonus_tick{current_player.bonus>0}:
+        bonus: -1
+        score: 1000*current_player.bonus_multiplier
+    balldevice_bd_eject_ball_eject_success:
+        scoreBonus:
+            action: set
+            int: 0
+    ejectBall:
+        score: 5000
+    bonusDone{current_player.heldBonus==0}:
+        bonus:
+            int: 1
+            action: set
+    bonusDone{current_player.heldBonus>0}:
+        bonus:
+            int: current_player.heldBonus
+            action: set
+        
+
     
 
 event_player:
@@ -186,6 +215,17 @@ event_player:
       - advBonus_active
     inlane_active:
       - advBonus_active
+    timer_bonus_tick{current_player.bonus==0}:
+      - bonusDone
+    balldevice_bd_eject_ball_enter{current_player.scoreBonus==1}:
+      - scoreBonus
+    balldevice_bd_eject_ball_enter{current_player.scoreBonus==0}:
+      - ejectBall
+    ball_started:
+        player_bonus: 
+            value:
+                value: current_player.bonus
+                type: int
 
 light_player:
     "{current_player.spinner==1}":
@@ -346,7 +386,7 @@ show_player:
     "{current_player.heldBonus>=10 and current_player.heldBonus<20}":
         flashing:
             show_tokens:
-                lights: bonus0k
+                lights: bonus10k
             action: play
             key: bonusShow10
             priority: 100
@@ -494,3 +534,22 @@ timers:
           - action: jump
             value: 1
             event: spinner_active
+    bonus:
+        start_value: 1
+        end_value: 0
+        direction: down
+        restart_on_complete: yes
+        tick_interval: 300ms
+        control_events:
+          - action: stop
+            event: bonusDone
+          - action: restart
+            event: startBonus
+          - action: restart
+            event: scoreBonus
+
+
+queue_relay_player:
+    ball_ending:
+        post: startBonus
+        wait_for: bonusDone
