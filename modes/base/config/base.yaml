@@ -292,6 +292,18 @@ show_player:
             speed: 5
     player_superSpinner{value==0}:
         spinnerShow: stop
+
+    ball_save_default_enabled:
+        flashing:
+            show_tokens:
+                lights: shootAgain
+            key: ballSaveShow
+            action: play
+            priority: 100
+            speed: 2
+    ball_save_default_disabled:
+        ballSaveShow: stop
+
     "{current_player.special==1}":
         flashing:
             show_tokens:

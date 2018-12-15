@@ -187,6 +187,8 @@ digital_outputs:
     tilt_relay:
         number: 2
         type: light
+        enable_events: tilt_started
+        disable_events: tiltl_will_end
 
 lights:
     highScore:
@@ -381,3 +383,9 @@ accruals:
           - laneC_active
           - laneD_active
         events_when_complete: lanesComplete
+
+ball_saves:
+    default:
+        active_time: 10s
+        enable_events: ball_started
+        timer_start_events: sw_lane_active
