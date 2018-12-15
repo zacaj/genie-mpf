@@ -1,0 +1,47 @@
+#show_version=5
+  - duration: 100ms
+    lights:
+        bonus1k: on
+  - duration: 100ms
+    lights:
+        bonus2k: on
+  - duration: 100ms
+    lights:
+        bonus1k: off
+        bonus3k: on
+  - duration: 100ms
+    lights:
+        bonus2k: off
+        bonus4k: on
+  - duration: 100ms
+    lights:
+        bonus3k: off
+        bonus5k: on
+  - duration: 100ms
+    lights:
+        bonus4k: off
+        bonus6k: on
+  - duration: 100ms
+    lights:
+        bonus5k: off
+        bonus7k: on
+  - duration: 100ms
+    lights:
+        bonus6k: off
+        bonus8k: on
+  - duration: 100ms
+    lights:
+        bonus7k: off
+        bonus9k: on
+  - duration: 100ms
+    lights:
+        bonus8k: off
+        bonus10k: on
+        bonus20k: on
+  - duration: 100ms
+    lights:
+        bonus9k: off
+  - duration: 100ms
+    lights:
+        bonus10k: off
+        bonus20k: off

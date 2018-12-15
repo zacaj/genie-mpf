@@ -1,0 +1,12 @@
+#config_version=5
+
+show_player:
+    mode_attract_started: 
+        attract_bonus:
+            loops: -1
+        attract_bonusX:
+            loops: -1
+        attract_lanes:
+            loops: -1
+        attract_other:
+            loops: -1

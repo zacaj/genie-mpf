@@ -322,8 +322,8 @@ virtual_platform_start_active_switches:
 
 modes:
   - base
-#  - bonus
-#  - tilt
+  - tilt
+  - attract
 
 player_vars:
     spinner:

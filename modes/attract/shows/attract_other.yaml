@@ -1,0 +1,29 @@
+#show_version=5
+  - duration: 300ms
+    lights:
+        leftEb: off
+        rightEb: on
+  - duration: 300ms
+    lights:
+        rightEb: off
+        advMultiplier: on
+  - duration: 300ms
+    lights:
+        advMultiplier: off
+        spinner: on
+  - duration: 300ms
+    lights:
+        spinner: off
+        whiteDrops: on
+  - duration: 300ms
+    lights:
+        whiteDrops: off
+        special: on
+  - duration: 300ms
+    lights:
+        special: off
+        collectBonus: on
+  - duration: 300ms
+    lights:
+        collectBonus: off
+        leftEb: on

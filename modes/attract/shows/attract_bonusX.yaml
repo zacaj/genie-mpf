@@ -1,0 +1,17 @@
+#show_version=5
+  - duration: 200ms
+    lights:
+        bonus5x: off
+        bonus2x: on
+  - duration: 200ms
+    lights:
+        bonus2x: off
+        bonus4x: on
+  - duration: 200ms
+    lights:
+        bonus4x: off
+        bonus3x: on
+  - duration: 200ms
+    lights:
+        bonus3x: off
+        bonus5x: on

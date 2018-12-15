@@ -1,0 +1,25 @@
+#show_version=5
+  - duration: 200ms
+    lights:
+        lowerLaneD: off
+        upperLaneA: off
+        lowerLaneA: on
+        upperLaneD: on
+  - duration: 200ms
+    lights:
+        lowerLaneA: off
+        upperLaneD: off
+        lowerLaneC: on
+        upperLaneB: on
+  - duration: 200ms
+    lights:
+        lowerLaneC: off
+        upperLaneB: off
+        lowerLaneB: on
+        upperLaneC: on
+  - duration: 200ms
+    lights:
+        lowerLaneB: off
+        upperLaneC: off
+        lowerLaneD: on
+        upperLaneA: on
