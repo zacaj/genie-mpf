@@ -29,7 +29,8 @@ variable_player:
         heldBonus:
             int: 0
             action: set
-
+    standup10_active:
+        score: 10
     lowerPop_active:
         score: 2000
     upperPop_active:
@@ -42,7 +43,7 @@ variable_player:
         advX: 
             int: 1
             action: set
-    sw_dropYellow_active{current_player.advX!=1}:
+    sw_dropYellow_active{current_player.advX==0}:
         bonus: 1
     sw_dropYellow_active{current_player.advX==1}:
         bonus_multiplier: 1
@@ -63,6 +64,9 @@ variable_player:
         whiteDown: 1
         score: 2000
         bonus: 1
+    sw_dropWhite_active{current_player.whiteDrops==1}:
+        score: 3000
+        bonus: 2
     sw_dropYellow_active:
         score: 2000
     advBonus_active:
@@ -84,6 +88,7 @@ variable_player:
         scoreBonus:
             int: 1
             action: set
+        score: 5000
     drop_target_bank_yellow_down{current_player.heldBonus==0}:
         heldBonus: current_player.bonus
     #    heldBonusX: current_player.bonus_multiplier
@@ -92,20 +97,26 @@ variable_player:
         scoreBonus:
             int: 1
             action: set
+        whiteDrops:
+            int: 1
+            action: set
+        score: 5000
     drop_target_bank_white_down:
         rightEb: 1
         scoreBonus:
             int: 1
             action: set
-    special{current_player.special>0}:
+        score: 5000
+    special_active{current_player.special>0}:
         score: 100000
         special: -1
-    rightEb{current_player.rightEb>0}:
+    rightEb_active{current_player.rightEb>0}:
         score: 25000
         rightEb: -1
-    leftEb{current_player.leftEb>0}:
+    leftEb_active{current_player.leftEb>0}:
         score: 50000
         leftEb: -1
+
     player_bonus{current_player.bonus>29}:
         bonus:
             int: 29
@@ -188,10 +199,10 @@ variable_player:
     timer_bonus_tick{current_player.bonus>0}:
         bonus: -1
         score: 1000*current_player.bonus_multiplier
-    balldevice_bd_eject_ball_eject_success:
-        scoreBonus:
-            action: set
-            int: 0
+    #balldevice_bd_eject_ball_eject_success:
+    #    scoreBonus:
+    #        action: set
+    #        int: 0
     ejectBall:
         score: 5000
     bonusDone{current_player.heldBonus==0}:
@@ -202,7 +213,22 @@ variable_player:
         bonus:
             int: current_player.heldBonus
             action: set
-        
+
+    startBonus:
+        collecting:
+            int: 1
+            action: set
+    scoreBonus:
+        collecting:
+            int: 1
+            action: set
+        scoreBonus:
+            int: 0
+            action: set
+    bonusDone:
+        collecting:
+            int: 0
+            action: set
 
     
 
@@ -228,7 +254,7 @@ event_player:
                 type: int
 
 light_player:
-    "{current_player.spinner==1}":
+    "{current_player.spinner==1 and current_player.collecting==0}":
         spinner: on
     "{current_player.a==1}":
         laneA: on
@@ -242,6 +268,14 @@ light_player:
         collectBonus: on    
     "{current_player.advX==1}":
         advMultiplier: on
+    "{current_player.whiteDrops==1}":
+        whiteDrops: on
+    "{current_player.special>0}":
+        special: on
+    "{current_player.leftEb>0}":
+        leftEb: on
+    "{current_player.rightEb>0}":
+        rightEb: on
 
     player_bonus:
         bonus: off
@@ -304,26 +338,85 @@ show_player:
     ball_save_default_disabled:
         ballSaveShow: stop
 
-    "{current_player.special==1}":
+    sw_dropWhite_active{current_player.whiteDrops==1}:
+        flashing:
+            show_tokens:
+                lights: whiteDrops
+            key: whiteDropsShow
+            action: play
+            priority: 100
+            speed: 3
+            loops: 3
+    sw_dropYellow_active{current_player.advX==1}:
+        flashing:
+            show_tokens:
+                lights: advMultiplier
+            key: advMultiplierShow
+            action: play
+            priority: 100
+            speed: 3
+            loops: 3
+    #"{current_player.collecting==1 and device.ball_holds.eject.balls_held>0}":
+    scoreBonus:
+        flashing:
+            show_tokens:
+                lights: collectBonus
+            key: collectBonusShow
+            action: play
+            priority: 100
+            speed: 2
+    bonusDone:
+        collectBonusShow: stop
+
+
+    #"{current_player.special==1}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: special
+    #        action: play
+    #        key: specialShow
+    #"{current_player.leftEb==1}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: leftEb
+    #        action: play
+    #        key: leftEbShow
+    #"{current_player.rightEb==1}":
+    #    flashing:
+    #        show_tokens:
+    #            lights: rightEb
+    #        action: play
+    #        key: rightEbShow
+
+    special_active:
         flashing:
             show_tokens:
                 lights: special
             action: play
             key: specialShow
-    "{current_player.leftEb==1}":
+            speed: 3
+            loops: 5
+            priority: 100
+    leftEb_active:
         flashing:
             show_tokens:
                 lights: leftEb
             action: play
+            speed: 3
+            loops: 5
+            priority: 100
             key: leftEbShow
-    "{current_player.rightEb==1}":
+    rightEb_active:
         flashing:
             show_tokens:
                 lights: rightEb
             action: play
             key: rightEbShow
+            speed: 3
+            loops: 5
+            priority: 100
 
-    "{current_player.heldBonus%10==1}":
+    "{current_player.heldBonus%10==1 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus1k
@@ -331,7 +424,7 @@ show_player:
             key: bonusShow1
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==2}":
+    "{current_player.heldBonus%10==2 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus2k
@@ -339,7 +432,7 @@ show_player:
             key: bonusShow2
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==3}":
+    "{current_player.heldBonus%10==3 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus3k
@@ -347,7 +440,7 @@ show_player:
             key: bonusShow3
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==4}":
+    "{current_player.heldBonus%10==4 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus4k
@@ -355,7 +448,7 @@ show_player:
             key: bonusShow4
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==5}":
+    "{current_player.heldBonus%10==5 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus5k
@@ -363,7 +456,7 @@ show_player:
             key: bonusShow5
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==6}":
+    "{current_player.heldBonus%10==6 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus6k
@@ -371,7 +464,7 @@ show_player:
             key: bonusShow6
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==7}":
+    "{current_player.heldBonus%10==7 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus7k
@@ -379,7 +472,7 @@ show_player:
             key: bonusShow7
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==8}":
+    "{current_player.heldBonus%10==8 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus8k
@@ -387,7 +480,7 @@ show_player:
             key: bonusShow8
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus%10==9}":
+    "{current_player.heldBonus%10==9 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus9k
@@ -403,7 +496,7 @@ show_player:
             key: bonusShow10
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonus>=20}":
+    "{current_player.heldBonus>=20 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus20k
@@ -412,7 +505,7 @@ show_player:
             priority: 100
             sync_ms: 1000
 
-    "{current_player.heldBonusX==2}":
+    "{current_player.heldBonusX==2 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus2x
@@ -420,7 +513,7 @@ show_player:
             key: bonus2xShow
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonusX==3}":
+    "{current_player.heldBonusX==3 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus3x
@@ -428,7 +521,7 @@ show_player:
             key: bonus3xShow
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonusX==4}":
+    "{current_player.heldBonusX==4 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus4x
@@ -436,7 +529,7 @@ show_player:
             key: bonus4xShow
             priority: 100
             sync_ms: 1000
-    "{current_player.heldBonusX==5}":
+    "{current_player.heldBonusX==5 and current_player.collecting==0}":
         flashing:
             show_tokens:
                 lights: bonus5x
@@ -565,3 +658,15 @@ queue_relay_player:
     ball_ending:
         post: startBonus
         wait_for: bonusDone
+
+accruals:
+    lane:
+        events:
+          - laneA_active
+          - laneB_active
+          - laneC_active
+          - laneD_active
+        events_when_complete: lanesComplete
+        reset_on_complete: yes
+        disable_on_complete: no
+        persist_state: yes

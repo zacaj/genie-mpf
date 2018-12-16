@@ -364,6 +364,8 @@ player_vars:
         initial_value: 0
     rightEb:
         initial_value: 0
+    collecting:
+        initial_value: 0
 
 shows:
     flashing:
@@ -375,17 +377,12 @@ shows:
             (lights): off
       - time: 1
 
-accruals:
-    lane:
-        events:
-          - laneA_active
-          - laneB_active
-          - laneC_active
-          - laneD_active
-        events_when_complete: lanesComplete
-
 ball_saves:
     default:
         active_time: 10s
         enable_events: ball_started
         timer_start_events: sw_lane_active
+
+hardware_sound_systems:
+   default:
+      label: LISY
