@@ -30,11 +30,11 @@ variable_player:
             int: 0
             action: set
     standup10_active:
-        score: 10
+        tens: 1
     lowerPop_active:
-        score: 2000
+        thousands: 2
     upperPop_active:
-        score: 200
+        hundreds: 2
     player_redDown{value>0 and (current_player.whiteDown>0)}:
         advX: 
             int: 1
@@ -57,38 +57,37 @@ variable_player:
             int: 0
             action: set
     sw_dropRed_active:
-        score: 2000
+        thousands: 2
         bonus: 1
         redDown: 1
     sw_dropWhite_active:
         whiteDown: 1
-        score: 2000
+        thousands: 2
         bonus: 1
     sw_dropWhite_active{current_player.whiteDrops==1}:
-        score: 3000
+        thousands: 3
         bonus: 2
     sw_dropYellow_active:
-        score: 2000
+        thousands: 2
     advBonus_active:
-        score: 500
+        hundreds: 5
         bonus: 1
     dangerLane_active:
-        score: 3000
+        thousands: 3
     outlane_active:
-        score: 10000
-        heldBonus: 1
+        thousands: 10
     spinner_active{current_player.spinner}:
         bonus: 3
     spinner_active{current_player.superSpinner==1}:
-        score: 1000
+        thousands: 1
     spinner_active{current_player.superSpinner==0}:
-        score: 100
+        hundreds: 1
 
     drop_target_bank_yellow_down:
         scoreBonus:
             int: 1
             action: set
-        score: 5000
+        thousands: 5
     drop_target_bank_yellow_down{current_player.heldBonus==0}:
         heldBonus: current_player.bonus
     #    heldBonusX: current_player.bonus_multiplier
@@ -100,13 +99,13 @@ variable_player:
         whiteDrops:
             int: 1
             action: set
-        score: 5000
+        thousands: 5
     drop_target_bank_white_down:
         rightEb: 1
         scoreBonus:
             int: 1
             action: set
-        score: 5000
+        thousands: 5
     special_active{current_player.special>0}:
         score: 100000
         special: -1
@@ -121,7 +120,7 @@ variable_player:
         bonus:
             int: 29
             action: set
-        score: 5000
+        thousands: 5
     player_bonus{value%2==0}:
         spinner:
             int: 0
@@ -140,38 +139,40 @@ variable_player:
             int: 0
             action: set
 
+    sw_lane_active:
+        bonus: 1   
     laneA_active{current_player.a==1}:
-        score: 4500
-        bonus: 1   
+        thousands: 5
     laneB_active{current_player.b==1}:
-        score: 4500
-        bonus: 1   
+        thousands: 5
     laneC_active{current_player.c==1}:
-        score: 4500
-        bonus: 1   
+        thousands: 5
     laneD_active{current_player.d==1}:
-        score: 4500
-        bonus: 1   
+        thousands: 5
+    laneA_active{current_player.a==0}:
+        hundreds: 5
+    laneB_active{current_player.b==0}:
+        hundreds: 5
+    laneC_active{current_player.c==0}:
+        hundreds: 5
+    laneD_active{current_player.d==0}:
+        hundreds: 5
     laneA_active:
         a:
             int: 0
             action: set   
-        score: 500
     laneB_active:
         b:
             int: 0
             action: set   
-        score: 500   
     laneC_active:
         c:
             int: 0
             action: set   
-        score: 500   
     laneD_active:
         d:
             int: 0
             action: set  
-        score: 500    
     lanesComplete:
         a:
             int: 1
@@ -198,13 +199,13 @@ variable_player:
 
     timer_bonus_tick{current_player.bonus>0}:
         bonus: -1
-        score: 1000*current_player.bonus_multiplier
+        thousands: current_player.bonus_multiplier
     #balldevice_bd_eject_ball_eject_success:
     #    scoreBonus:
     #        action: set
     #        int: 0
     ejectBall:
-        score: 5000
+        thousands: 5
     bonusDone{current_player.heldBonus==0}:
         bonus:
             int: 1
@@ -229,6 +230,16 @@ variable_player:
         collecting:
             int: 0
             action: set
+
+    timer_score_tick{current_player.thousands>0}:
+        thousands: -1
+        score: 1000
+    timer_score_tick{current_player.hundreds>0}:
+        hundreds: -1
+        score: 100
+    timer_score_tick{current_player.tens>0}:
+        tens: -1
+        score: 10
 
     
 
@@ -393,10 +404,14 @@ show_player:
             show_tokens:
                 lights: special
             action: play
-            key: specialShow
+            key: specialFlash
             speed: 3
             loops: 5
             priority: 100
+        knock:
+            action: play
+            key: specialKnock     
+            loops: 4   
     leftEb_active:
         flashing:
             show_tokens:
@@ -406,6 +421,10 @@ show_player:
             loops: 5
             priority: 100
             key: leftEbShow
+        knock:
+            action: play
+            key: leftEbKnock     
+            loops: 2 
     rightEb_active:
         flashing:
             show_tokens:
@@ -415,6 +434,10 @@ show_player:
             speed: 3
             loops: 5
             priority: 100
+        knock:
+            action: play
+            key: rightEbKnock     
+            loops: 1
 
     "{current_player.heldBonus%10==1 and current_player.collecting==0}":
         flashing:
@@ -627,6 +650,10 @@ show_player:
     #        priority: 100
     #        sync_ms: 1000
 
+coil_player:
+    timer_score_tick{current_player.thousands>0}: thousands
+    timer_score_tick{current_player.thousands==0 and current_player.hundreds>0}: hundreds
+    timer_score_tick{current_player.thousands==0 and current_player.hundreds==0 and current_player.tens>0}: tens
 
 timers:
     spinner:
@@ -644,7 +671,7 @@ timers:
         end_value: 0
         direction: down
         restart_on_complete: yes
-        tick_interval: 300ms
+        tick_interval: .200*current_player.bonus_multiplier + .050
         control_events:
           - action: stop
             event: bonusDone
@@ -652,7 +679,25 @@ timers:
             event: startBonus
           - action: restart
             event: scoreBonus
-
+    score:
+        start_value: 1
+        end_value: 0
+        direction: down
+        restart_on_complete: yes
+        tick_interval: 200ms
+        control_events:
+          - action: stop
+            event: player_thousands{value==0 and current_player.hundreds==0 and current_player.tens==0}
+          - action: stop
+            event: player_hundreds{value==0 and current_player.thousands==0 and current_player.tens==0}
+          - action: stop
+            event: player_tens{value==0 and current_player.hundreds==0 and current_player.thousands==0}
+          - action: start
+            event: player_thousands{change>0 and prev_value==0}
+          - action: start
+            event: player_hundreds{change>0 and prev_value==0}
+          - action: start
+            event: player_tens{change>0 and prev_value==0}
 
 queue_relay_player:
     ball_ending:
