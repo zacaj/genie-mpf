@@ -3,11 +3,16 @@
 hardware:
     platform: lisy 
 
-lisy:
-    connection: network
-    network_port: 5963
-    network_host: 192.168.2.34
+#lisy:
+#    connection: network
+#    network_port: 5963
+#    network_host: localhost #192.168.80.1 #192.168.1.32
     
+lisy:
+  connection: network
+  network_port: 5963
+  network_host: "localhost"
+  poll_hz: 100
 
 switches:
     slam:
@@ -31,15 +36,19 @@ switches:
         number: 04
     laneA:
         number: 10
+        ignore_window_ms: 100ms
         tags: lane, playfield_active 
     laneB:
         number: 11
+        ignore_window_ms: 100ms
         tags: lane, playfield_active 
     laneC:
         number: 13
+        ignore_window_ms: 100ms
         tags: lane, playfield_active 
     laneD:
         number: 14
+        ignore_window_ms: 100ms
         tags: lane, playfield_active 
     dropYellow1:
         number: 20
@@ -95,6 +104,7 @@ switches:
     dangerLane:
         number: 54
     advBonus:
+        ignore_window_ms: 100ms
         number: 63
     inlane:
         number: 64
@@ -140,6 +150,7 @@ drop_target_banks:
     yellow:
         drop_targets: yellow1, yellow2, yellow3, yellow4
         reset_coils: yellowReset
+        ignore_switch_ms: 1000ms
         reset_on_complete: 500ms
         reset_events: 
             drop_target_bank_yellow_down
@@ -148,17 +159,19 @@ drop_target_banks:
     red:
         drop_targets: red1, red3, red5, red7
         reset_coils: upperReset
+        ignore_switch_ms: 1000ms
         reset_on_complete: 500ms
         reset_events: 
-            drop_target_bank_red_down
+            drop_target_bank_red_down{devices.drop_target_banks.white.complete==false}
             ball_starting
             machine_reset_phase_3
     white:
         drop_targets: white2, white4, white6
         reset_coils: upperReset
+        ignore_switch_ms: 1000ms
         reset_on_complete: 500ms
         reset_events: 
-            drop_target_bank_white_down
+            drop_target_bank_white_down{devices.drop_target_banks.red.complete==false}
 
 
     
@@ -177,15 +190,17 @@ coils:
         number: 6
     yellowReset:
         number: 7
+        default_pulse_ms: 50ms
     upperReset:
         number: 8
+        default_pulse_ms: 50ms
 
 digital_outputs:
     game_over_relay:
         number: 1
         type: light
         enable_events: ball_started
-        disable_events: ball_will_end
+        disable_events: game_will_end, machine_reset_phase_3
     tilt_relay:
         number: 2
         type: light
@@ -324,27 +339,27 @@ segment_display_player:
       text: ""
 
   # flash display on player turn
-  player_turn_started.1{number==1}:
-    display1:
-      action: flash
+  #player_turn_started.1{number==1}:
+  #  display1:
+  #    action: flash
   player_turn_ended.2{number==1}:
     display1:
       action: no_flash
-  player_turn_started.3{number==2}:
-    display2:
-      action: flash
+  #player_turn_started.3{number==2}:
+  #  display2:
+  #    action: flash
   player_turn_ended.4{number==2}:
     display2:
       action: no_flash
-  player_turn_started.5{number==3}:
-    display3:
-      action: flash
+  #player_turn_started.5{number==3}:
+  #  display3:
+  #    action: flash
   player_turn_ended.6{number==3}:
     display3:
       action: no_flash
-  player_turn_started.7{number==4}:
-    display4:
-      action: flash
+  #player_turn_started.7{number==4}:
+  #  display4:
+  #    action: flash
   player_turn_ended.8{number==4}:
     display4:
       action: no_flash
@@ -463,7 +478,7 @@ ball_saves:
     default:
         active_time: 10s
         enable_events: ball_started
-        timer_start_events: sw_lane_active
+        timer_start_events: sw_lane_active, upperPop_active
 
 hardware_sound_systems:
    default:

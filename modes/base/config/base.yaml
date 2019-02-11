@@ -2,20 +2,20 @@
 mode:
     start_events: ball_starting
     priority: 100
-    code: Base.Base
+    #code: Base.Base
 variable_player:
     mode_base_started:
         bonus: 
             int: current_player.heldBonus if current_player.heldBonus>0  else 1
             action: set
-       #scoreBonus: 
-       #    int: 0
-       #    action: set
+        scoreBonus: 
+           int: 0
+           action: set
         whiteDrops: 
             int: 0
             action: set
         advX:
-            int: 0
+            int: 1
             action: set
         bonus_multiplier:
             int: 1
@@ -33,8 +33,14 @@ variable_player:
         tens: 1
     lowerPop_active:
         thousands: 2
+        spinner:
+            int: 1 if current_player.spinner==0 else 0
+            action: set
     upperPop_active:
-        hundreds: 2
+        hundreds: 1
+        spinner:
+            int: 1 if current_player.spinner==0 else 0
+            action: set
     player_redDown{value>0 and (current_player.whiteDown>0)}:
         advX: 
             int: 1
@@ -43,9 +49,9 @@ variable_player:
         advX: 
             int: 1
             action: set
-    sw_dropYellow_active{current_player.advX==0}:
+    drop_yellow{current_player.advX==0}:
         bonus: 1
-    sw_dropYellow_active{current_player.advX==1}:
+    drop_yellow{current_player.advX==1}:
         bonus_multiplier: 1
         advX: 
             int: 0
@@ -56,18 +62,18 @@ variable_player:
         whiteDown:
             int: 0
             action: set
-    sw_dropRed_active:
+    drop_red:
         thousands: 2
         bonus: 1
         redDown: 1
-    sw_dropWhite_active:
+    drop_white:
         whiteDown: 1
         thousands: 2
         bonus: 1
-    sw_dropWhite_active{current_player.whiteDrops==1}:
+    drop_white{current_player.whiteDrops==1}:
         thousands: 3
         bonus: 2
-    sw_dropYellow_active:
+    drop_yellow:
         thousands: 2
     advBonus_active:
         hundreds: 5
@@ -76,10 +82,13 @@ variable_player:
         thousands: 3
     outlane_active:
         thousands: 10
-    spinner_active{current_player.spinner}:
-        bonus: 3
+    spinner_active{current_player.spinner and current_player.superSpinner==0}:
+        bonus: 5
+        spinner:
+            int: 0
+            action: set
     spinner_active{current_player.superSpinner==1}:
-        thousands: 1
+        bonus: 1
     spinner_active{current_player.superSpinner==0}:
         hundreds: 1
 
@@ -107,13 +116,13 @@ variable_player:
             action: set
         thousands: 5
     special_active{current_player.special>0}:
-        score: 100000
+        score: 200000
         special: -1
     rightEb_active{current_player.rightEb>0}:
-        score: 25000
+        score: 50000
         rightEb: -1
     leftEb_active{current_player.leftEb>0}:
-        score: 50000
+        score: 100000
         leftEb: -1
 
     player_bonus{current_player.bonus>29}:
@@ -121,14 +130,14 @@ variable_player:
             int: 29
             action: set
         thousands: 5
-    player_bonus{value%2==0}:
-        spinner:
-            int: 0
-            action: set
-    player_bonus{value%2!=0}:
-        spinner:
-            int: 1
-            action: set     
+    #player_bonus{value%2==0}:
+    #    spinner:
+    #        int: 0
+    #        action: set
+    #player_bonus{value%2!=0}:
+    #    spinner:
+    #        int: 1
+    #        action: set     
 
     inlane_active:
         superSpinner:
@@ -199,13 +208,13 @@ variable_player:
 
     timer_bonus_tick{current_player.bonus>0}:
         bonus: -1
-        thousands: current_player.bonus_multiplier
+        thousands: 1*current_player.bonus_multiplier
     #balldevice_bd_eject_ball_eject_success:
     #    scoreBonus:
     #        action: set
     #        int: 0
     ejectBall:
-        thousands: 5
+        thousands: 3
     bonusDone{current_player.heldBonus==0}:
         bonus:
             int: 1
@@ -213,6 +222,9 @@ variable_player:
     bonusDone{current_player.heldBonus>0}:
         bonus:
             int: current_player.heldBonus
+            action: set
+        heldBonus:
+            int: 0
             action: set
 
     startBonus:
@@ -240,10 +252,41 @@ variable_player:
     timer_score_tick{current_player.tens>0}:
         tens: -1
         score: 10
+    tens{value>5 and change>0}:
+        tens: 5-current_player.tens
+        score: 10*(current_player.tens-5)
+    hundreds{value>5 and change>0}:
+        tens: 5-current_player.hundreds
+        score: 100*(current_player.hundreds-5)
+    thousands{value>5 and change>0}:
+        tens: 5-current_player.thousands
+        score: 1000*(current_player.thousands-5)
 
     
 
 event_player:
+    drop_target_yellow1_down:
+      - drop_yellow
+    drop_target_yellow2_down:
+      - drop_yellow
+    drop_target_yellow3_down:
+      - drop_yellow
+    drop_target_yellow4_down:
+      - drop_yellow
+    drop_target_red1_down:
+      - drop_red
+    drop_target_red3_down:
+      - drop_red
+    drop_target_red5_down:
+      - drop_red
+    drop_target_red7_down:
+      - drop_red
+    drop_target_white2_down:
+      - drop_white
+    drop_target_white4_down:
+      - drop_white
+    drop_target_white6_down:
+      - drop_white
     rightEb_active:
       - advBonus_active
     leftEb_active:
@@ -258,10 +301,19 @@ event_player:
       - scoreBonus
     balldevice_bd_eject_ball_enter{current_player.scoreBonus==0}:
       - ejectBall
-    ball_started:
-        player_bonus: 
+    mode_base_started:
+        player_bonus:  
             value:
-                value: current_player.bonus
+                value: 1*current_player.bonus
+                type: int
+    ball_device_bd_outhole_ball_eject_success:
+        player_bonus:  
+            value:
+                value: 1*current_player.bonus
+                type: int
+        player_bonus_multiplier:
+            value:
+                value: 1*current_player.bonus_multiplier
                 type: int
 
 light_player:
@@ -349,7 +401,7 @@ show_player:
     ball_save_default_disabled:
         ballSaveShow: stop
 
-    sw_dropWhite_active{current_player.whiteDrops==1}:
+    drop_white{current_player.whiteDrops==1}:
         flashing:
             show_tokens:
                 lights: whiteDrops
@@ -358,7 +410,7 @@ show_player:
             priority: 100
             speed: 3
             loops: 3
-    sw_dropYellow_active{current_player.advX==1}:
+    drop_yellow{current_player.advX==1}:
         flashing:
             show_tokens:
                 lights: advMultiplier
@@ -399,7 +451,7 @@ show_player:
     #        action: play
     #        key: rightEbShow
 
-    special_active:
+    special_active{current_player.special>0}:
         flashing:
             show_tokens:
                 lights: special
@@ -412,7 +464,7 @@ show_player:
             action: play
             key: specialKnock     
             loops: 4   
-    leftEb_active:
+    leftEb_active{current_player.leftEb>0}:
         flashing:
             show_tokens:
                 lights: leftEb
@@ -425,7 +477,7 @@ show_player:
             action: play
             key: leftEbKnock     
             loops: 2 
-    rightEb_active:
+    rightEb_active{current_player.rightEb>0}:
         flashing:
             show_tokens:
                 lights: rightEb
@@ -671,7 +723,7 @@ timers:
         end_value: 0
         direction: down
         restart_on_complete: yes
-        tick_interval: .200*current_player.bonus_multiplier + .050
+        tick_interval: .125*current_player.bonus_multiplier + .050
         control_events:
           - action: stop
             event: bonusDone
@@ -684,7 +736,7 @@ timers:
         end_value: 0
         direction: down
         restart_on_complete: yes
-        tick_interval: 200ms
+        tick_interval: 125ms
         control_events:
           - action: stop
             event: player_thousands{value==0 and current_player.hundreds==0 and current_player.tens==0}
