@@ -12,169 +12,169 @@ lisy:
   connection: network
   network_port: 5963
   network_host: "localhost"
-  poll_hz: 100
+  poll_hz: 50
 
 switches:
-    slam:
-        number: 76
+##    slam:
+#        number: 76
     outhole:
         number: 66
-    reset:
-        number: 56
-    test:
-        number: 00
-    coin1:
-        number: 01
-        tags: coin
-    coin2:
-        number: 02
-        tags: coin
-    start:
-        number: 03
-        tags: start
-    tilt:
-        number: 04
-    laneA:
-        number: 10
-        ignore_window_ms: 100ms
-        tags: lane, playfield_active 
-    laneB:
-        number: 11
-        ignore_window_ms: 100ms
-        tags: lane, playfield_active 
-    laneC:
-        number: 13
-        ignore_window_ms: 100ms
-        tags: lane, playfield_active 
-    laneD:
-        number: 14
-        ignore_window_ms: 100ms
-        tags: lane, playfield_active 
-    dropYellow1:
-        number: 20
-        tags: dropYellow
-    dropYellow2:
-        number: 21
-        tags: dropYellow
-    dropYellow3:
-        number: 23
-        tags: dropYellow
-    dropYellow4:
-        number: 24
-        tags: dropYellow
-    dropRed1:
-        number: 30
-        tags: dropRed, dropUpper
-    dropWhite2:
-        number: 70
-        tags: dropWhite, dropUpper
-    dropRed3:
-        number: 31
-        tags: dropRed, dropUpper
-    dropWhite4:
-        number: 71
-        tags: dropWhite, dropUpper
-    dropRed5:
-        number: 60
-        tags: dropRed, dropUpper
-    dropWhite6:
-        number: 74
-        tags: dropWhite, dropUpper
-    dropRed7:
-        number: 61
-        tags: dropRed, dropUpper
-    spinner:
-        number: 33
-    special:
-        number: 40
-    eject:
-        number: 41
-    lowerPop:
-        number: 43
-        tags: pop
-    leftEb:
-        number: 44
-    standup10:
-        number: 50
-    rightEb:
-        number: 51
-    upperPop:
-        number: 53
-        tags: pop
-    dangerLane:
-        number: 54
-    advBonus:
-        ignore_window_ms: 100ms
-        number: 63
-    inlane:
-        number: 64
-    outlane:
-        number: 73
-
-drop_targets:
-    yellow1:
-        switch: dropYellow1
-        reset_coil: yellowReset
-    yellow2:
-        switch: dropYellow2
-        reset_coil: yellowReset
-    yellow3:
-        switch: dropYellow3
-        reset_coil: yellowReset
-    yellow4:
-        switch: dropYellow4
-        reset_coil: yellowReset
-    red1:
-        switch: dropRed1
-        reset_coil: upperReset
-    white2:
-        switch: dropWhite2
-        reset_coil: upperReset
-    red3:
-        switch: dropRed3
-        reset_coil: upperReset
-    white4:
-        switch: dropWhite4
-        reset_coil: upperReset
-    red5:
-        switch: dropRed5
-        reset_coil: upperReset
-    white6:
-        switch: dropWhite6
-        reset_coil: upperReset
-    red7:
-        switch: dropRed7
-        reset_coil: upperReset
-
-drop_target_banks:
-    yellow:
-        drop_targets: yellow1, yellow2, yellow3, yellow4
-        reset_coils: yellowReset
-        ignore_switch_ms: 1000ms
-        reset_on_complete: 500ms
-        reset_events: 
-            drop_target_bank_yellow_down
-            ball_starting
-            machine_reset_phase_3
-    red:
-        drop_targets: red1, red3, red5, red7
-        reset_coils: upperReset
-        ignore_switch_ms: 1000ms
-        reset_on_complete: 500ms
-        reset_events: 
-            drop_target_bank_red_down{devices.drop_target_banks.white.complete==false}
-            ball_starting
-            machine_reset_phase_3
-    white:
-        drop_targets: white2, white4, white6
-        reset_coils: upperReset
-        ignore_switch_ms: 1000ms
-        reset_on_complete: 500ms
-        reset_events: 
-            drop_target_bank_white_down{devices.drop_target_banks.red.complete==false}
-
-
-    
+##    reset:
+#        number: 56
+##    test:
+#        number: 00
+##    coin1:
+#        number: 01
+#        tags: coin
+##    coin2:
+#        number: 02
+#        tags: coin
+##    start:
+#        number: 03
+#        tags: start
+##    tilt:
+#        number: 04
+##    laneA:
+#        number: 10
+#        ignore_window_ms: 100ms
+#        tags: lane, playfield_active 
+##    laneB:
+#        number: 11
+#        ignore_window_ms: 100ms
+#        tags: lane, playfield_active 
+##    laneC:
+#        number: 13
+#        ignore_window_ms: 100ms
+#        tags: lane, playfield_active 
+##    laneD:
+#        number: 14
+#        ignore_window_ms: 100ms
+#        tags: lane, playfield_active 
+##    dropYellow1:
+#        number: 20
+#        tags: dropYellow
+##    dropYellow2:
+#        number: 21
+#        tags: dropYellow
+##    dropYellow3:
+#        number: 23
+#        tags: dropYellow
+##    dropYellow4:
+#        number: 24
+#        tags: dropYellow
+##    dropRed1:
+#        number: 30
+#        tags: dropRed, dropUpper
+##    dropWhite2:
+#        number: 70
+#        tags: dropWhite, dropUpper
+##    dropRed3:
+#        number: 31
+#        tags: dropRed, dropUpper
+##    dropWhite4:
+#        number: 71
+#        tags: dropWhite, dropUpper
+##    dropRed5:
+#        number: 60
+#        tags: dropRed, dropUpper
+##    dropWhite6:
+#        number: 74
+#        tags: dropWhite, dropUpper
+##    dropRed7:
+#        number: 61
+#        tags: dropRed, dropUpper
+##    spinner:
+#        number: 33
+##    special:
+#        number: 40
+##    eject:
+#        number: 41
+##    lowerPop:
+#        number: 43
+#        tags: pop
+##    leftEb:
+#        number: 44
+##    standup10:
+#        number: 50
+##    rightEb:
+#        number: 51
+##    upperPop:
+#        number: 53
+#        tags: pop
+##    dangerLane:
+#        number: 54
+##    advBonus:
+#        ignore_window_ms: 100ms
+#        number: 63
+##    inlane:
+#        number: 64
+##    outlane:
+#        number: 73
+#
+#drop_targets:
+#    yellow1:
+#        switch: dropYellow1
+#        reset_coil: yellowReset
+#    yellow2:
+#        switch: dropYellow2
+#        reset_coil: yellowReset
+#    yellow3:
+#        switch: dropYellow3
+#        reset_coil: yellowReset
+#    yellow4:
+#        switch: dropYellow4
+#        reset_coil: yellowReset
+#    red1:
+#        switch: dropRed1
+#        reset_coil: upperReset
+#    white2:
+#        switch: dropWhite2
+#        reset_coil: upperReset
+#    red3:
+#        switch: dropRed3
+#        reset_coil: upperReset
+#    white4:
+#        switch: dropWhite4
+#        reset_coil: upperReset
+#    red5:
+#        switch: dropRed5
+#        reset_coil: upperReset
+#    white6:
+#        switch: dropWhite6
+#        reset_coil: upperReset
+#    red7:
+#        switch: dropRed7
+#        reset_coil: upperReset
+#
+#drop_target_banks:
+#    yellow:
+#        drop_targets: yellow1, yellow2, yellow3, yellow4
+#        reset_coils: yellowReset
+#        ignore_switch_ms: 1000ms
+#        reset_on_complete: 500ms
+#        reset_events: 
+#            drop_target_bank_yellow_down
+#            ball_starting
+#            machine_reset_phase_3
+#    red:
+#        drop_targets: red1, red3, red5, red7
+#        reset_coils: upperReset
+#        ignore_switch_ms: 1000ms
+#        reset_on_complete: 500ms
+#        reset_events: 
+#            drop_target_bank_red_down{devices.drop_target_banks.white.complete==false}
+#            ball_starting
+#            machine_reset_phase_3
+#    white:
+#        drop_targets: white2, white4, white6
+#        reset_coils: upperReset
+#        ignore_switch_ms: 1000ms
+#        reset_on_complete: 500ms
+#        reset_events: 
+#            drop_target_bank_white_down{devices.drop_target_banks.red.complete==false}
+#
+#
+#    
 coils:
     outhole:
         number: 1
@@ -194,18 +194,18 @@ coils:
     upperReset:
         number: 8
         default_pulse_ms: 50ms
-
-digital_outputs:
-    game_over_relay:
-        number: 1
-        type: light
-        enable_events: ball_started
-        disable_events: game_will_end, machine_reset_phase_3
-    tilt_relay:
-        number: 2
-        type: light
-        enable_events: tilt_started
-        disable_events: tiltl_will_end
+#
+#digital_outputs:
+#    game_over_relay:
+#        number: 1
+#        type: light
+#        enable_events: ball_started
+#        disable_events: game_will_end, machine_reset_phase_3
+#    tilt_relay:
+#        number: 2
+#        type: light
+#        enable_events: tilt_started
+#        disable_events: tiltl_will_end
 
 lights:
     highScore:
@@ -296,110 +296,110 @@ lights:
     rightEb:
         number: 36
 
-segment_displays:
-  display5:
-    number: 0
-  display1:
-    number: 1
-  display2:
-    number: 2
-  display3:
-    number: 3
-  display4:
-    number: 4
-segment_display_player:
-  # empty all displays on game start and setup display5
-  game_start:
-    display1:
-      text: ""
-    display2:
-      text: ""
-    display3:
-      text: ""
-    display4:
-      text: ""
-    display5:
-      text: "{current_player.ball:d}"
-
-  # clear only display5 after game
-  game_ended{machine.player1_score > 0}:
-    display1:
-      text: "{machine.player1_score:d}"
-  game_ended{machine.player2_score > 0}:
-    display2:
-      text: "{machine.player2_score:d}"
-  game_ended{machine.player3_score > 0}:
-    display3:
-      text: "{machine.player3_score:d}"
-  game_ended{machine.player4_score > 0}:
-    display4:
-      text: "{machine.player4_score:d}"
-  game_ended:
-    display5:
-      text: ""
-
-  # flash display on player turn
-  #player_turn_started.1{number==1}:
-  #  display1:
-  #    action: flash
-  player_turn_ended.2{number==1}:
-    display1:
-      action: no_flash
-  #player_turn_started.3{number==2}:
-  #  display2:
-  #    action: flash
-  player_turn_ended.4{number==2}:
-    display2:
-      action: no_flash
-  #player_turn_started.5{number==3}:
-  #  display3:
-  #    action: flash
-  player_turn_ended.6{number==3}:
-    display3:
-      action: no_flash
-  #player_turn_started.7{number==4}:
-  #  display4:
-  #    action: flash
-  player_turn_ended.8{number==4}:
-    display4:
-      action: no_flash
-
-  # show score when adding players
-  player_added.1{num==1}:
-    display1:
-      text: "{players[0].score:d}"
-  player_added.2{num==2}:
-    display2:
-      text: "{players[1].score:d}"
-  player_added.3{num==3}:
-    display3:
-      text: "{players[2].score:d}"
-  player_added.4{num==4}:
-    display4:
-      text: "{players[3].score:d}"
-
+#segment_displays:
+#  display5:
+#    number: 0
+#  display1:
+#    number: 1
+#  display2:
+#    number: 2
+#  display3:
+#    number: 3
+#  display4:
+#    number: 4
+#segment_display_player:
+#  # empty all displays on game start and setup display5
+#  game_start:
+#    display1:
+#      text: ""
+#    display2:
+#      text: ""
+#    display3:
+#      text: ""
+#    display4:
+#      text: ""
+#    display5:
+#      text: "{current_player.ball:d}"
+#
+#  # clear only display5 after game
+#  game_ended{machine.player1_score > 0}:
+#    display1:
+#      text: "{machine.player1_score:d}"
+#  game_ended{machine.player2_score > 0}:
+#    display2:
+#      text: "{machine.player2_score:d}"
+#  game_ended{machine.player3_score > 0}:
+#    display3:
+#      text: "{machine.player3_score:d}"
+#  game_ended{machine.player4_score > 0}:
+#    display4:
+#      text: "{machine.player4_score:d}"
+#  game_ended:
+#    display5:
+#      text: ""
+#
+#  # flash display on player turn
+#  #player_turn_started.1{number==1}:
+#  #  display1:
+#  #    action: flash
+#  player_turn_ended.2{number==1}:
+#    display1:
+#      action: no_flash
+#  #player_turn_started.3{number==2}:
+#  #  display2:
+#  #    action: flash
+#  player_turn_ended.4{number==2}:
+#    display2:
+#      action: no_flash
+#  #player_turn_started.5{number==3}:
+#  #  display3:
+#  #    action: flash
+#  player_turn_ended.6{number==3}:
+#    display3:
+#      action: no_flash
+#  #player_turn_started.7{number==4}:
+#  #  display4:
+#  #    action: flash
+#  player_turn_ended.8{number==4}:
+#    display4:
+#      action: no_flash
+#
+#  # show score when adding players
+#  player_added.1{num==1}:
+#    display1:
+#      text: "{players[0].score:d}"
+#  player_added.2{num==2}:
+#    display2:
+#      text: "{players[1].score:d}"
+#  player_added.3{num==3}:
+#    display3:
+#      text: "{players[2].score:d}"
+#  player_added.4{num==4}:
+#    display4:
+#      text: "{players[3].score:d}"
+#
 ball_devices:
     bd_outhole:
         ball_switches: outhole
         eject_coil: outhole
         eject_targets: playfield
         tags: drain, home, trough
-    bd_eject:
-        ball_switches: eject
-        eject_coil: eject
-
-ball_holds:
-    eject:
-        hold_devices: bd_eject
-        release_one_events: 
-          - bonusDone
-          - ejectBall
-        #enable_events: player_scoreBonus{value==1}
-        #disable_events: 
-        #  - player_scoreBonus{value==0}
-        #  - ball_started
-
-
+#    bd_eject:
+#        ball_switches: eject
+#        eject_coil: eject
+#
+#ball_holds:
+#    eject:
+#        hold_devices: bd_eject
+#        release_one_events: 
+#          - bonusDone
+#          - ejectBall
+#        #enable_events: player_scoreBonus{value==1}
+#        #disable_events: 
+#        #  - player_scoreBonus{value==0}
+#        #  - ball_started
+#
+#
 
 playfields:
     playfield:
@@ -480,6 +480,6 @@ ball_saves:
         enable_events: ball_started
         timer_start_events: sw_lane_active, upperPop_active
 
-hardware_sound_systems:
-   default:
-      label: LISY
+#hardware_sound_systems:
+#   default:
+#      label: LISY
